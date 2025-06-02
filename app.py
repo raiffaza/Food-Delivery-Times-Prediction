@@ -3,12 +3,12 @@ import pandas as pd
 import joblib
 from PIL import Image
 
-# Inject custom CSS for styling
+# Inject custom CSS for styling and layout
 def local_css():
     st.markdown(
         """
         <style>
-        /* General styles */
+        /* General page styling */
         body {
             background-color: #121212;
             color: #f0f0f0;
@@ -50,6 +50,36 @@ def local_css():
             color: #000000 !important;
             font-weight: 600 !important;
         }
+        /* Center text and image container */
+        .centered-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .centered-text {
+            max-width: 600px;
+            font-size: 20px;
+            line-height: 1.6;
+            text-align: center;
+            color: #e0e0e0;
+        }
+        .blunt-image {
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+        }
+        .logo-center {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
         </style>
         """,
         unsafe_allow_html=True
@@ -61,8 +91,13 @@ local_css()
 model = joblib.load('xgb_tuned_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
-# Load local logo image
-logo = Image.open("uber eats.png")  # Make sure this file is in the same directory as app.py
+# Load images for sidebar sections
+company_profile_img = Image.open("uber eats company profile.jpeg")
+business_problem_img = Image.open("uber eats business problem.jpeg")
+purpose_website_img = Image.open("uber eats company profile.jpeg")  # as requested, same image as company profile
+
+# Load Uber Eats logo (no text below)
+logo_img = Image.open("uber eats.png")
 
 # Sidebar navigation
 st.sidebar.title("Uber Eats Delivery Insights")
@@ -70,30 +105,62 @@ menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Pur
 
 # Sidebar content
 if menu == "Company Profile":
-    st.sidebar.markdown("""
-    ### Company Profile
-    Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.  
-    Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
-    """)
+    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+    st.image(logo_img, width=180)
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class='centered-content'>
+            <img src="data:image/jpeg;base64,""" + company_profile_img._repr_png_().decode('utf-8') + """ alt="Company Profile" class="blunt-image"/>
+            <p class='centered-text'>
+                Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.
+                Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 elif menu == "Business Problem":
-    st.sidebar.markdown("""
-    ### Business Problem
-    Accurately predicting delivery times remains a key challenge in food delivery logistics.  
-    Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.  
-    Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
-    """)
+    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+    st.image(logo_img, width=180)
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class='centered-content'>
+            <img src="data:image/jpeg;base64,""" + business_problem_img._repr_png_().decode('utf-8') + """ alt="Business Problem" class="blunt-image"/>
+            <p class='centered-text'>
+                Accurately predicting delivery times remains a key challenge in food delivery logistics.
+                Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.
+                Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 elif menu == "Purpose of this Website":
-    st.sidebar.markdown("""
-    ### Purpose of this Website
-    This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.  
-    Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
-    """)
+    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+    st.image(logo_img, width=180)
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class='centered-content'>
+            <img src="data:image/jpeg;base64,""" + purpose_website_img._repr_png_().decode('utf-8') + """ alt="Purpose of Website" class="blunt-image"/>
+            <p class='centered-text'>
+                This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.
+                Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 if menu == "Predict Delivery Time":
-    # Display logo and title
-    st.image(logo, width=180, caption="Uber Eats")
+    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+    st.image(logo_img, width=180)
+    st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown(
         "<h1 style='color:#00B14F; font-weight: 800; text-align:center;'>Uber Eats Delivery Time Predictor</h1>",
         unsafe_allow_html=True
