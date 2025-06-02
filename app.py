@@ -97,7 +97,7 @@ menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Pur
 
 # Show small centered logo on all pages
 st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
-st.image(logo_img, width=120)
+st.image(logo_img)
 st.markdown("</div>", unsafe_allow_html=True)
 
 if menu == "Company Profile":
@@ -140,9 +140,9 @@ elif menu == "Predict Delivery Time":
 
     with st.form("delivery_form"):
         st.subheader("Input Delivery Details")
-        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="<span style='color:#00B14F'>Distance between restaurant and delivery address.</span>", unsafe_allow_html=True)
-        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="<span style='color:#00B14F'>Time taken to prepare the order.</span>", unsafe_allow_html=True)
-        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="<span style='color:#00B14F'>Years of delivery courier experience.</span>", unsafe_allow_html=True)
+        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
+        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
+        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
 
         st.markdown("<span style='color:#00B14F; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
         weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
