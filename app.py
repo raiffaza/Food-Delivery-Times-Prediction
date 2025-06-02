@@ -5,8 +5,8 @@ import requests
 from io import BytesIO
 
 # --- Constants ---
-MODEL_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl"
-SCALER_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/scaler.pkl"
+MODEL_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl" 
+SCALER_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/scaler.pkl" 
 
 # --- Helper Functions ---
 @st.cache_resource
@@ -50,12 +50,11 @@ def main():
     )
 
     # --- Title and Logo (Centered) ---
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.image("uber eats.png", width=250)
-    
-    )
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image("uber eats.png", width=250)
     st.markdown("<h1 style='color: white; text-align: center;'>Uber Eats Delivery Time Prediction</h1>", unsafe_allow_html=True)
+
     st.markdown("""
     ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
     Our goal is to provide the most accurate delivery time estimates to ensure a seamless customer experience.
@@ -79,7 +78,6 @@ with col2:
     - **Real-Time Predictions**: Get instant predictions on delivery times based on distance, weather, and traffic conditions.
     - **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
     """, unsafe_allow_html=True)
-
 
     # --- Load Model and Scaler ---
     model = load_file_from_github(MODEL_URL)
