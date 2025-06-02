@@ -85,102 +85,71 @@ local_css()
 model = joblib.load('xgb_tuned_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
-# Load images (ensure these images are in your project folder)
-logo_img = Image.open("uber eats.png")
-company_profile_img = Image.open("uber eats company profile.jpeg")
-business_problem_img = Image.open("uber eats business problem.jpeg")
-purpose_website_img = Image.open("uber eats company profile.jpeg")  # same image as company profile
+# Get the exact feature names and order expected by the model
+expected_columns = model.feature_names_in_.tolist()
 
-# Sidebar navigation
-st.sidebar.title("Uber Eats Delivery Insights")
-menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Purpose of this Website", "Predict Delivery Time"])
+# Identify numeric features (must match training data)
+numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
-# Show small centered logo on all pages
-st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
-st.image(logo_img)
-st.markdown("</div>", unsafe_allow_html=True)
+def make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_of_day, vehicle):
+    # Initialize all features to 0 (scalar, not list)
+    data = {col: 0 for col in expected_columns}
 
-if menu == "Company Profile":
-    st.image(company_profile_img, width=450)
-    st.markdown("""
-        <div class="text-center">
-        Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.
-        Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
-        </div>
-        """, unsafe_allow_html=True)
+    # Fill numeric features
+    data['Distance_km'] = distance_km
+    data['Preparation_Time_min'] = prep_time
+    data['Courier_Experience_yrs'] = courier_exp
 
-elif menu == "Business Problem":
-    st.image(business_problem_img, width=450)
-    st.markdown("""
-        <div class="text-center">
-        Accurately predicting delivery times remains a key challenge in food delivery logistics.
-        Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.
-        Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
-        </div>
-        """, unsafe_allow_html=True)
+    # Set selected categorical features to 1
+    weather_col = f'Weather_{weather}'
+    if weather_col in data:
+        data[weather_col] = 1
 
-elif menu == "Purpose of this Website":
-    st.image(purpose_website_img, width=450)
-    st.markdown("""
-        <div class="text-center">
-        This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.
-        Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
-        </div>
-        """, unsafe_allow_html=True)
+    traffic_col = f'Traffic_Level_{traffic}'
+    if traffic_col in data:
+        data[traffic_col] = 1
 
-elif menu == "Predict Delivery Time":
-    st.markdown(
-        "<h1 style='color:#00B14F; font-weight: 800; text-align:center;'>Uber Eats Delivery Time Predictor</h1>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<p style='color:#b3b3b3; font-size:18px; text-align:center;'>Powered by XGBoost Machine Learning Model</p>",
-        unsafe_allow_html=True
-    )
+    time_col = f'Time_of_Day_{time_of_day}'
+    if time_col in data:
+        data[time_col] = 1
 
-    with st.form("delivery_form"):
-        st.subheader("Input Delivery Details")
-        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
-        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
-        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+    vehicle_col = f'Vehicle_Type_{vehicle}'
+    if vehicle_col in data:
+        data[vehicle_col] = 1
 
-        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
-        weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
+    # Convert to DataFrame with the expected columns
+    input_df = pd.DataFrame([data], columns=expected_columns)
 
-        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
-        traffic = st.selectbox("", ['Low', 'Medium', 'High'])
+    # Scale only numeric features
+    input_df[numeric_features] = scaler.transform(input_df[numeric_features])
 
-        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
-        time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
+    # Make prediction
+    prediction = model.predict(input_df)[0]
+    return prediction
 
-        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
-        vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
+# --- User Input Section ---
+print("Enter the following details to predict delivery time:")
 
-        submit = st.form_submit_button("Predict Delivery Time")
+try:
+    distance_km = float(input("Distance (km): "))
+    prep_time = int(input("Preparation Time (minutes): "))
+    courier_exp = float(input("Courier Experience (years): "))
 
-    if submit:
-        data = {
-            'Distance_km': distance_km,
-            'Preparation_Time_min': prep_time,
-            'Courier_Experience_yrs': courier_exp,
-            'Weather_Windy': 0, 'Weather_Clear': 0, 'Weather_Foggy': 0, 'Weather_Rainy': 0, 'Weather_Snowy': 0,
-            'Traffic_Level_Low': 0, 'Traffic_Level_Medium': 0, 'Traffic_Level_High': 0,
-            'Time_of_Day_Afternoon': 0, 'Time_of_Day_Evening': 0, 'Time_of_Day_Night': 0, 'Time_of_Day_Morning': 0,
-            'Vehicle_Type_Scooter': 0, 'Vehicle_Type_Bike': 0, 'Vehicle_Type_Car': 0
-        }
+    print("Weather options: Clear, Foggy, Rainy, Snowy, Windy")
+    weather = input("Weather: ").capitalize()
 
-        data[f'Weather_{weather}'] = 1
-        data[f'Traffic_Level_{traffic}'] = 1
-        data[f'Time_of_Day_{time_of_day}'] = 1
-        data[f'Vehicle_Type_{vehicle}'] = 1
+    print("Traffic options: Low, Medium, High")
+    traffic = input("Traffic Level: ").capitalize()
 
-        input_df = pd.DataFrame([data])
-        numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
+    print("Time of Day options: Morning, Afternoon, Evening, Night")
+    time_of_day = input("Time of Day: ").capitalize()
 
-        # Fix for scaler transform - ensure correct columns and order
-        numeric_data = input_df[numeric_features]
-        numeric_scaled = scaler.transform(numeric_data)
-        input_df.loc[:, numeric_features] = numeric_scaled
+    print("Vehicle options: Bike, Car, Scooter")
+    vehicle = input("Vehicle Type: ").capitalize()
 
-        prediction = model.predict(input_df)[0]
-        st.markdown(f"<h2 style='color:#00B14F; text-align:center;'>Estimated Delivery Time: {prediction:.2f} minutes</h2>", unsafe_allow_html=True)
+    predicted_time = make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_of_day, vehicle)
+    print(f"\nEstimated Delivery Time: {predicted_time:.2f} minutes")
+
+except Exception as e:
+    print("\nAn error occurred during prediction:")
+    print(e)
