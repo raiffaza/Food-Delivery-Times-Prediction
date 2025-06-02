@@ -46,45 +46,49 @@ def main():
     st.set_page_config(
         page_title="Uber Eats Delivery Time Prediction",
         page_icon="🍔",
-        layout="wide"
+        layout="centered"  # Centered layout for all content
     )
 
-    # --- HEADER --- 
-    # Centered Logo (Ensure this image is in the same directory as app.py)
+    # --- Header Section (Centered Logo) --- 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image("uber eats.png", width=250)  # Centered logo
+        st.image("uber eats.png", width=250)  # Uber Eats logo centered
 
-    # Title and Subtitle with white text
-    st.markdown("<h1 style='color: white; text-align: center;'>Uber Eats Delivery Time Prediction</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='color: white; text-align: center;'>Fast • Secure • Intelligent</h3>", unsafe_allow_html=True)
-
-    # --- ABOUT SECTION ---
+    # --- Title and Description Section ---
+    st.title("Uber Eats Delivery Time Prediction")
     st.markdown("""
-    ## About Uber Eats
-    Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques to improve customer satisfaction and operational efficiency.
+    ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
+    Our goal is to provide the most accurate delivery time estimates to ensure a seamless customer experience.
+    This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
+    """)
 
-    This app uses a trained machine learning model to predict the delivery time based on parameters like distance, weather, traffic, and more.
-    """, unsafe_allow_html=True)
+    # --- Business Problem Section ---
+    st.markdown("""
+    ## Business Problem
+    Predicting delivery times is a crucial component of efficient operations at Uber Eats. Accurate delivery time predictions:
+    - Improve customer satisfaction by reducing delays.
+    - Optimize resource allocation for couriers and delivery routes.
+    - Help manage customer expectations and improve the overall delivery process.
+    """)
 
-    # Display the Business Problem Image (wide and centered)
+    # Display the Business Problem Image (centered and full-width)
     st.image("uber eats business problem.jpeg", use_container_width=True)
 
-    # --- PURPOSE OF THE APP SECTION ---
+    # --- Purpose of the Website Section ---
     st.markdown("""
     ## Purpose of this Website
     This platform allows users to input specific delivery parameters and instantly receive a **data-driven estimate** of the delivery time, powered by an advanced **XGBoost machine learning model**.
-
+    
     ### 🎯 Objectives:
     - Real-time predictions based on input data
     - Improved resource allocation for Uber Eats operations
     - More accurate delivery time predictions to optimize customer experience
-    """, unsafe_allow_html=True)
+    """)
 
-    # Display the Company Profile Image (wide and centered, using use_container_width)
+    # Display the Company Profile Image (centered and full-width)
     st.image("uber eats company profile.jpeg", use_container_width=True)
 
-    # --- INPUT FORM SECTION ---
+    # --- Input Form Section ---
     st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
 
     with st.form("delivery_form"):
@@ -106,7 +110,7 @@ def main():
 
         submit = st.form_submit_button("Predict Delivery Time")
 
-    # --- PREDICTION RESULT SECTION ---
+    # --- Prediction and Explanation ---
     if submit:
         input_data = {
             'Distance_km': distance_km,
@@ -121,7 +125,6 @@ def main():
         st.markdown("<h2 style='color: white; text-align: center;'>📊 Prediction Result</h2>", unsafe_allow_html=True)
         st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
 
-        # Additional Info (Explanation) centered
         st.markdown("""
         ---
         ### 🔍 Explanation of Features
