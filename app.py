@@ -1,10 +1,21 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import requests
+from io import BytesIO
 
-# Load model and scaler
-model = joblib.load(r'H:\Kuliah\Bootcamp\Take Home Test\xgb_tuned_model.pkl')
-scaler = joblib.load(r'H:\Kuliah\Bootcamp\Take Home Test\scaler.pkl')
+# Function to load files directly from GitHub
+def load_file_from_github(url):
+    response = requests.get(url)
+    return joblib.load(BytesIO(response.content))
+
+# URLs for model and scaler files hosted on GitHub
+model_url = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/blob/main/xgb_tuned_model.pkl"
+scaler_url = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/blob/main/scaler.pkl"
+
+# Load model and scaler from GitHub
+model = load_file_from_github(model_url)
+scaler = load_file_from_github(scaler_url)
 
 # Get the exact feature names and order expected by the model
 expected_columns = model.feature_names_in_.tolist()
@@ -38,7 +49,7 @@ def make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_
     if vehicle_col in data:
         data[vehicle_col] = 1
 
-    # Convert to DataFrame
+    # Convert to DataFrame with the expected columns
     input_df = pd.DataFrame([data], columns=expected_columns)
 
     # Scale only numeric features
