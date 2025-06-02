@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 from PIL import Image
 
-# Inject custom CSS for luxury styling
+# Inject custom CSS for styling and layout
 def local_css():
     st.markdown(
         """
@@ -14,55 +14,43 @@ def local_css():
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
         .sidebar .sidebar-content {
             background-color: #121212;
             color: #ffffff;
         }
-
         h1, h2, h3, h4, h5 {
             color: #ffffff;
             font-weight: 700;
         }
-
-        .center-container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            padding: 40px 20px;
-            flex-wrap: wrap;
-        }
-
-        .text-box {
-            max-width: 600px;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            text-align: center;
-            color: #cccccc;
-        }
-
-        .image-box img {
-            width: 300px;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-        }
-
         .logo-center {
             display: flex;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
-
         .logo-center img {
-            width: 180px;
+            width: 120px;
             height: auto;
             border-radius: 12px;
             box-shadow: 0 6px 16px rgba(0, 177, 79, 0.3);
         }
-
+        .image-blunt {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .text-center {
+            max-width: 700px;
+            margin: 30px auto;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            text-align: center;
+            color: #cccccc;
+        }
         .stButton>button {
             background-color: #00B14F;
             color: white;
@@ -72,7 +60,10 @@ def local_css():
             width: 100%;
             transition: background-color 0.3s ease;
         }
-
+        .stButton>button:hover {
+            background-color: #22d26b;
+            color: #000;
+        }
         .stTextInput>div>input, .stNumberInput>div>input, .stSelectbox>div>div {
             background-color: #1e1e1e;
             color: #fff;
@@ -80,15 +71,8 @@ def local_css():
             border-radius: 6px;
             padding: 10px;
         }
-
         .css-1kyxreq.edgvbvh3 {  /* selectbox arrow */
             color: #00B14F;
-        }
-
-        .stAlert {
-            background-color: #00B14F !important;
-            color: #000000 !important;
-            font-weight: 600 !important;
         }
         </style>
         """,
@@ -101,17 +85,57 @@ local_css()
 model = joblib.load('xgb_tuned_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
-# Load central logo
-logo = Image.open("uber eats.png")
+# Load images (ensure these images exist in your folder)
+logo_img = Image.open("uber eats.png")
+company_profile_img = Image.open("uber eats company profile.jpeg")
+business_problem_img = Image.open("uber eats business problem.jpeg")
+purpose_website_img = Image.open("uber eats company profile.jpeg")  # same as company profile per request
 
 # Sidebar navigation
 st.sidebar.title("Uber Eats Delivery Insights")
 menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Purpose of this Website", "Predict Delivery Time"])
 
-# Navigation logic
-if menu == "Predict Delivery Time":
-    # Prediction Page
-    st.image(logo, width=180)
+# Show logo small and centered on every page except prediction page where it’s bigger
+if menu != "Predict Delivery Time":
+    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+    st.image(logo_img)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# Pages with image then text centered below
+if menu == "Company Profile":
+    st.image(company_profile_img, use_column_width=False, width=450, caption=None, clamp=False, channels="RGB", output_format="auto", class_="image-blunt")
+    st.markdown("""
+        <div class="text-center">
+        Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.  
+        Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
+        </div>
+        """, unsafe_allow_html=True)
+
+elif menu == "Business Problem":
+    st.image(business_problem_img, use_column_width=False, width=450, class_="image-blunt")
+    st.markdown("""
+        <div class="text-center">
+        Accurately predicting delivery times remains a key challenge in food delivery logistics.  
+        Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.  
+        Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
+        </div>
+        """, unsafe_allow_html=True)
+
+elif menu == "Purpose of this Website":
+    st.image(purpose_website_img, use_column_width=False, width=450, class_="image-blunt")
+    st.markdown("""
+        <div class="text-center">
+        This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.  
+        Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
+        </div>
+        """, unsafe_allow_html=True)
+
+elif menu == "Predict Delivery Time":
+    # Bigger logo on top center
+    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+    st.image(logo_img, width=180)
+    st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown(
         "<h1 style='color:#00B14F; font-weight: 800; text-align:center;'>Uber Eats Delivery Time Predictor</h1>",
         unsafe_allow_html=True
@@ -152,65 +176,11 @@ if menu == "Predict Delivery Time":
 
         input_df = pd.DataFrame([data])
         numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
-        input_df[numeric_features] = scaler.transform(input_df[numeric_features])
+
+        # Fix for scaler transform - ensure correct columns and order
+        numeric_data = input_df[numeric_features]
+        numeric_scaled = scaler.transform(numeric_data)
+        input_df.loc[:, numeric_features] = numeric_scaled
 
         prediction = model.predict(input_df)[0]
         st.markdown(f"<h2 style='color:#00B14F; text-align:center;'>Estimated Delivery Time: {prediction:.2f} minutes</h2>", unsafe_allow_html=True)
-
-else:
-    # Show pages with image + text layout
-    st.markdown('<div class="logo-center">', unsafe_allow_html=True)
-    st.image(logo)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    if menu == "Company Profile":
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            st.markdown('<div class="image-box">', unsafe_allow_html=True)
-            st.image("uber eats company profile.jpeg")
-            st.markdown('</div>', unsafe_allow_html=True)
-        with col2:
-            st.markdown("""
-                <div class="text-box">
-                    <h2>Company Profile</h2>
-                    <p>
-                        Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.
-                        Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
-                    </p>
-                </div>
-            """, unsafe_allow_html=True)
-
-    elif menu == "Business Problem":
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            st.markdown('<div class="image-box">', unsafe_allow_html=True)
-            st.image("uber eats business problem.jpeg")
-            st.markdown('</div>', unsafe_allow_html=True)
-        with col2:
-            st.markdown("""
-                <div class="text-box">
-                    <h2>Business Problem</h2>
-                    <p>
-                        Accurately predicting delivery times remains a key challenge in food delivery logistics.
-                        Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.
-                        Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
-                    </p>
-                </div>
-            """, unsafe_allow_html=True)
-
-    elif menu == "Purpose of this Website":
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            st.markdown('<div class="image-box">', unsafe_allow_html=True)
-            st.image("uber eats company profile.jpeg")
-            st.markdown('</div>', unsafe_allow_html=True)
-        with col2:
-            st.markdown("""
-                <div class="text-box">
-                    <h2>Purpose of this Website</h2>
-                    <p>
-                        This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.
-                        Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
-                    </p>
-                </div>
-            """, unsafe_allow_html=True)
