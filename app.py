@@ -77,12 +77,16 @@ def make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_
     return prediction
 
 # Set page config
-st.set_page_config(page_title="Uber Eats Delivery Time Prediction", page_icon="🍔", layout="wide")
+st.set_page_config(
+    page_title="Uber Eats Delivery Time Prediction",
+    page_icon="🍔",
+    layout="wide"
+)
 
-# Centered Logo
+# Centered Logo (using raw URL from GitHub)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("uber eats.png", width=250)
+    st.image("uber eats purpose.jpg", width=250)
 
 # Title and Description
 st.title("Uber Eats Delivery Time Prediction")
@@ -112,7 +116,7 @@ This platform allows users to input specific delivery parameters and instantly r
 - **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
 """)
 
-st.image("uber eats purpose.jpg", width=450)
+st.image("uber eats company profile.jpeg", width=450)
 
 # Input Section
 st.header("Enter Delivery Details")
