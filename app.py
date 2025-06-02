@@ -118,8 +118,6 @@ This platform allows users to input specific delivery parameters and instantly r
 - **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
 """, unsafe_allow_html=True)
 
-# Display the Company Profile Image (wide and centered, using use_container_width)
-st.image("uber eats company profile.jpeg", use_container_width=True)
 
 # Input Section
 st.header("Enter Delivery Details", help="Please fill in the following details to estimate delivery time.")
