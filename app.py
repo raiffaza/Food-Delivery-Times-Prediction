@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+from PIL import Image
 
 # Inject custom CSS for styling
 def local_css():
@@ -22,7 +23,7 @@ def local_css():
             font-weight: 700;
         }
         .stButton>button {
-            background-color: #1DB954;
+            background-color: #00B14F; /* Uber Eats green */
             color: white;
             font-weight: 700;
             border-radius: 8px;
@@ -31,7 +32,7 @@ def local_css():
             transition: background-color 0.3s ease;
         }
         .stButton>button:hover {
-            background-color: #1ed760;
+            background-color: #22d26b;
             color: #000;
         }
         .stTextInput>div>input, .stNumberInput>div>input, .stSelectbox>div>div {
@@ -42,10 +43,10 @@ def local_css():
             padding: 10px;
         }
         .css-1kyxreq.edgvbvh3 {  /* selectbox arrow */
-            color: #1DB954;
+            color: #00B14F;
         }
         .stAlert {
-            background-color: #1DB954 !important;
+            background-color: #00B14F !important;
             color: #000000 !important;
             font-weight: 600 !important;
         }
@@ -60,36 +61,46 @@ local_css()
 model = joblib.load('xgb_tuned_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
+# Load local logo image
+logo = Image.open("uber eats.png")  # Make sure this file is in the same directory as app.py
+
 # Sidebar navigation
-st.sidebar.title("Uber Delivery Insights")
+st.sidebar.title("Uber Eats Delivery Insights")
 menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Purpose of this Website", "Predict Delivery Time"])
 
 # Sidebar content
 if menu == "Company Profile":
     st.sidebar.markdown("""
-    **Uber Technologies Inc.**  
-    A global leader in transportation and delivery technology, committed to providing seamless and reliable services worldwide.
+    ### Company Profile
+    Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.  
+    Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
     """)
+
 elif menu == "Business Problem":
     st.sidebar.markdown("""
-    **Business Challenge:**  
-    Predicting delivery times accurately to optimize logistics, improve customer experience, and reduce operational costs.
+    ### Business Problem
+    Accurately predicting delivery times remains a key challenge in food delivery logistics.  
+    Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.  
+    Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
     """)
+
 elif menu == "Purpose of this Website":
     st.sidebar.markdown("""
-    **Purpose:**  
-    To provide a user-friendly platform that estimates delivery times based on multiple operational factors using advanced machine learning.
+    ### Purpose of this Website
+    This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.  
+    Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
     """)
 
 if menu == "Predict Delivery Time":
+    # Display logo and title
+    st.image(logo, width=180, caption="Uber Eats")
     st.markdown(
-        """
-        <div style="text-align:center; padding-bottom: 20px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" width="180" alt="Uber Logo">
-            <h1 style="color:#1DB954; font-weight: 800;">Uber Food Delivery Time Predictor</h1>
-            <p style="font-size:18px; color:#b3b3b3;">Powered by XGBoost Machine Learning Model</p>
-        </div>
-        """, unsafe_allow_html=True
+        "<h1 style='color:#00B14F; font-weight: 800; text-align:center;'>Uber Eats Delivery Time Predictor</h1>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<p style='color:#b3b3b3; font-size:18px; text-align:center;'>Powered by XGBoost Machine Learning Model</p>",
+        unsafe_allow_html=True
     )
 
     with st.form("delivery_form"):
@@ -128,4 +139,4 @@ if menu == "Predict Delivery Time":
 
         # Prediction
         prediction = model.predict(input_df)[0]
-        st.markdown(f"<h2 style='color:#1DB954; text-align:center;'>Estimated Delivery Time: {prediction:.2f} minutes</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='color:#00B14F; text-align:center;'>Estimated Delivery Time: {prediction:.2f} minutes</h2>", unsafe_allow_html=True)
