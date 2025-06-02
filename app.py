@@ -83,12 +83,12 @@ st.set_page_config(
     layout="wide"
 )
 
-# Centered Logo (using local image)
+# Centered Logo (centered on screen)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("uber eats.png", width=250)  # Make sure this image is in the same directory as app.py
+    st.image("uber eats.png", width=250)  # Ensure this image is in the same directory as app.py
 
-# Title and Description with white text
+# Title and Description with white text, centered
 st.markdown("<h1 style='color: white; text-align: center;'>Uber Eats Delivery Time Prediction</h1>", unsafe_allow_html=True)
 st.markdown("""
 ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
@@ -108,7 +108,7 @@ Accurate predictions rely on understanding various factors such as traffic, weat
 """, unsafe_allow_html=True)
 
 # Display the Business Problem Image (wide and centered)
-st.image("uber eats business problem.jpeg", width=700)
+st.image("uber eats business problem.jpeg", use_column_width=True)
 
 # Purpose of the Website Section
 st.markdown("""
@@ -119,7 +119,7 @@ This platform allows users to input specific delivery parameters and instantly r
 """, unsafe_allow_html=True)
 
 # Display the Company Profile Image (wide and centered)
-st.image("uber eats company profile.jpeg", width=700)
+st.image("uber eats company profile.jpeg", use_column_width=True)
 
 # Input Section
 st.header("Enter Delivery Details", help="Please fill in the following details to estimate delivery time.")
