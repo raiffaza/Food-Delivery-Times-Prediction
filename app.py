@@ -76,11 +76,44 @@ def make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_
     prediction = model.predict(input_df)[0]
     return prediction
 
-# Streamlit interface
-st.title("Uber Eats Delivery Time Prediction")
-st.markdown("Enter the details below to predict the estimated delivery time.")
+# Set page config
+st.set_page_config(page_title="Uber Eats Delivery Time Prediction", page_icon="🍔", layout="wide")
 
-# User inputs
+# Centered Logo
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("https://upload.wikimedia.org/wikipedia/commons/4/43/Uber_Eats_Logo_2020.png", width=250)
+
+# Title and Description
+st.title("Uber Eats Delivery Time Prediction")
+st.markdown("""
+### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
+Our goal is to provide the most accurate delivery time estimates to ensure a seamless customer experience.
+This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
+""")
+
+# Business Problem Section
+st.markdown("""
+## Business Problem
+Predicting delivery times is a crucial component of efficient operations at Uber Eats. Accurate delivery time predictions:
+- Improve customer satisfaction by reducing delays.
+- Optimize resource allocation for couriers and delivery routes.
+- Help manage customer expectations and improve the overall delivery process.
+
+Accurate predictions rely on understanding various factors such as traffic, weather, and the courier’s experience, making machine learning an ideal solution for the task.
+""")
+
+# Purpose of the Website Section
+st.markdown("""
+## Purpose of this Website
+This platform allows users to input specific delivery parameters and instantly receive a **data-driven estimate** of the delivery time, powered by an advanced **XGBoost machine learning model**.
+- **Real-Time Predictions**: Get instant predictions on delivery times based on distance, weather, and traffic conditions.
+- **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
+""")
+
+# Input Section
+st.header("Enter Delivery Details")
+
 with st.form("delivery_form"):
     distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
     prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
@@ -100,9 +133,24 @@ with st.form("delivery_form"):
 
     submit = st.form_submit_button("Predict Delivery Time")
 
+# Prediction Result (appears only after button click)
 if submit:
     # Call prediction function when form is submitted
     predicted_time = make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_of_day, vehicle)
     
-    # Display result
-    st.markdown(f"<h2 style='color:#00B14F; text-align:center;'>Estimated Delivery Time: {predicted_time:.2f} minutes</h2>", unsafe_allow_html=True)
+    # Display result in an attractive manner
+    st.markdown("## 📊 Prediction Result")
+    st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
+
+    # Additional Info
+    st.markdown("""
+    ---
+    ### Explanation
+    - `Distance (km)` (numeric): Distance between the restaurant and the delivery address.
+    - `Preparation Time (minutes)` (numeric): Time taken to prepare the order.
+    - `Courier Experience (years)` (numeric): Years of experience of the courier.
+    - `Weather Condition` (categorical): Weather during the delivery (Windy, Clear, etc.).
+    - `Traffic Level` (categorical): Traffic conditions during the delivery (Low, Medium, High).
+    - `Time of Day` (categorical): Time of day during the delivery (Morning, Afternoon, Evening, Night).
+    - `Vehicle Type` (categorical): Type of vehicle used by the courier (Scooter, Bike, Car).
+""")
