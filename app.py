@@ -64,7 +64,7 @@ def local_css():
             background-color: #22d26b;
             color: #000;
         }
-        .stTextInput>div>input, .stNumberInput>div>input, .stSelectbox>div>div {
+        .stTextInput>div>input, .stNumberInput>div>input {
             background-color: #1e1e1e;
             color: #fff;
             border: none;
@@ -85,57 +85,50 @@ local_css()
 model = joblib.load('xgb_tuned_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
-# Load images (ensure these images exist in your folder)
+# Load images (ensure these images are in your project folder)
 logo_img = Image.open("uber eats.png")
 company_profile_img = Image.open("uber eats company profile.jpeg")
 business_problem_img = Image.open("uber eats business problem.jpeg")
-purpose_website_img = Image.open("uber eats company profile.jpeg")  # same as company profile per request
+purpose_website_img = Image.open("uber eats company profile.jpeg")  # same image as company profile
 
 # Sidebar navigation
 st.sidebar.title("Uber Eats Delivery Insights")
 menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Purpose of this Website", "Predict Delivery Time"])
 
-# Show logo small and centered on every page except prediction page where it’s bigger
-if menu != "Predict Delivery Time":
-    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
-    st.image(logo_img)
-    st.markdown("</div>", unsafe_allow_html=True)
+# Show small centered logo on all pages
+st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
+st.image(logo_img, width=120)
+st.markdown("</div>", unsafe_allow_html=True)
 
-# Pages with image then text centered below
 if menu == "Company Profile":
-    st.image(company_profile_img, use_column_width=False, width=450, caption=None, clamp=False, channels="RGB", output_format="auto", class_="image-blunt")
+    st.image(company_profile_img, width=450)
     st.markdown("""
         <div class="text-center">
-        Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.  
+        Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.
         Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
         </div>
         """, unsafe_allow_html=True)
 
 elif menu == "Business Problem":
-    st.image(business_problem_img, use_column_width=False, width=450, class_="image-blunt")
+    st.image(business_problem_img, width=450)
     st.markdown("""
         <div class="text-center">
-        Accurately predicting delivery times remains a key challenge in food delivery logistics.  
-        Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.  
+        Accurately predicting delivery times remains a key challenge in food delivery logistics.
+        Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.
         Understanding and forecasting delivery time based on factors like weather, traffic, and courier experience is critical for operational efficiency.
         </div>
         """, unsafe_allow_html=True)
 
 elif menu == "Purpose of this Website":
-    st.image(purpose_website_img, use_column_width=False, width=450, class_="image-blunt")
+    st.image(purpose_website_img, width=450)
     st.markdown("""
         <div class="text-center">
-        This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.  
+        This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.
         Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
         </div>
         """, unsafe_allow_html=True)
 
 elif menu == "Predict Delivery Time":
-    # Bigger logo on top center
-    st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
-    st.image(logo_img, width=180)
-    st.markdown("</div>", unsafe_allow_html=True)
-
     st.markdown(
         "<h1 style='color:#00B14F; font-weight: 800; text-align:center;'>Uber Eats Delivery Time Predictor</h1>",
         unsafe_allow_html=True
@@ -147,14 +140,21 @@ elif menu == "Predict Delivery Time":
 
     with st.form("delivery_form"):
         st.subheader("Input Delivery Details")
-        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
-        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
-        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="<span style='color:#00B14F'>Distance between restaurant and delivery address.</span>", unsafe_allow_html=True)
+        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="<span style='color:#00B14F'>Time taken to prepare the order.</span>", unsafe_allow_html=True)
+        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="<span style='color:#00B14F'>Years of delivery courier experience.</span>", unsafe_allow_html=True)
 
-        weather = st.selectbox("Weather Condition", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
-        traffic = st.selectbox("Traffic Level", ['Low', 'Medium', 'High'])
-        time_of_day = st.selectbox("Time of Day", ['Afternoon', 'Evening', 'Night', 'Morning'])
-        vehicle = st.selectbox("Vehicle Type", ['Scooter', 'Bike', 'Car'])
+        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+        weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
+
+        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+        traffic = st.selectbox("", ['Low', 'Medium', 'High'])
+
+        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+        time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
+
+        st.markdown("<span style='color:#00B14F; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+        vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
         submit = st.form_submit_button("Predict Delivery Time")
 
