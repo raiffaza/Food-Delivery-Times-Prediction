@@ -1,89 +1,10 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from PIL import Image
-
-# Inject custom CSS for styling and layout
-def local_css():
-    st.markdown(
-        """
-        <style>
-        /* General styles */
-        body {
-            background-color: #0f0f0f;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .sidebar .sidebar-content {
-            background-color: #121212;
-            color: #ffffff;
-        }
-        h1, h2, h3, h4, h5 {
-            color: #ffffff;
-            font-weight: 700;
-        }
-        .logo-center {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .logo-center img {
-            width: 120px;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgba(0, 177, 79, 0.3);
-        }
-        .image-blunt {
-            width: 100%;
-            max-width: 450px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .text-center {
-            max-width: 700px;
-            margin: 30px auto;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            text-align: center;
-            color: #cccccc;
-        }
-        .stButton>button {
-            background-color: #00B14F;
-            color: white;
-            font-weight: bold;
-            border-radius: 8px;
-            height: 45px;
-            width: 100%;
-            transition: background-color 0.3s ease;
-        }
-        .stButton>button:hover {
-            background-color: #22d26b;
-            color: #000;
-        }
-        .stTextInput>div>input, .stNumberInput>div>input {
-            background-color: #1e1e1e;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 10px;
-        }
-        .css-1kyxreq.edgvbvh3 {  /* selectbox arrow */
-            color: #00B14F;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-local_css()
 
 # Load model and scaler
-model = joblib.load('xgb_tuned_model.pkl')
-scaler = joblib.load('scaler.pkl')
+model = joblib.load(r'H:\Kuliah\Bootcamp\Take Home Test\xgb_tuned_model.pkl')
+scaler = joblib.load(r'H:\Kuliah\Bootcamp\Take Home Test\scaler.pkl')
 
 # Get the exact feature names and order expected by the model
 expected_columns = model.feature_names_in_.tolist()
@@ -117,7 +38,7 @@ def make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_
     if vehicle_col in data:
         data[vehicle_col] = 1
 
-    # Convert to DataFrame with the expected columns
+    # Convert to DataFrame
     input_df = pd.DataFrame([data], columns=expected_columns)
 
     # Scale only numeric features
@@ -127,29 +48,33 @@ def make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_
     prediction = model.predict(input_df)[0]
     return prediction
 
-# --- User Input Section ---
-print("Enter the following details to predict delivery time:")
+# Streamlit interface
+st.title("Uber Eats Delivery Time Prediction")
+st.markdown("Enter the details below to predict the estimated delivery time.")
 
-try:
-    distance_km = float(input("Distance (km): "))
-    prep_time = int(input("Preparation Time (minutes): "))
-    courier_exp = float(input("Courier Experience (years): "))
+# User inputs
+with st.form("delivery_form"):
+    distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
+    prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
+    courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
 
-    print("Weather options: Clear, Foggy, Rainy, Snowy, Windy")
-    weather = input("Weather: ").capitalize()
+    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+    weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
-    print("Traffic options: Low, Medium, High")
-    traffic = input("Traffic Level: ").capitalize()
+    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+    traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
-    print("Time of Day options: Morning, Afternoon, Evening, Night")
-    time_of_day = input("Time of Day: ").capitalize()
+    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+    time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
-    print("Vehicle options: Bike, Car, Scooter")
-    vehicle = input("Vehicle Type: ").capitalize()
+    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+    vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
+    submit = st.form_submit_button("Predict Delivery Time")
+
+if submit:
+    # Call prediction function when form is submitted
     predicted_time = make_prediction(distance_km, prep_time, courier_exp, weather, traffic, time_of_day, vehicle)
-    print(f"\nEstimated Delivery Time: {predicted_time:.2f} minutes")
-
-except Exception as e:
-    print("\nAn error occurred during prediction:")
-    print(e)
+    
+    # Display result
+    st.markdown(f"<h2 style='color:#00B14F; text-align:center;'>Estimated Delivery Time: {predicted_time:.2f} minutes</h2>", unsafe_allow_html=True)
