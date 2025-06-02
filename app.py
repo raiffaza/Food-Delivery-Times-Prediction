@@ -82,7 +82,7 @@ st.set_page_config(page_title="Uber Eats Delivery Time Prediction", page_icon="ð
 # Centered Logo
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/4/43/Uber_Eats_Logo_2020.png", width=250)
+    st.image("/mnt/data/uber eats.png", width=250)
 
 # Title and Description
 st.title("Uber Eats Delivery Time Prediction")
@@ -102,6 +102,7 @@ Predicting delivery times is a crucial component of efficient operations at Uber
 
 Accurate predictions rely on understanding various factors such as traffic, weather, and the courierâ€™s experience, making machine learning an ideal solution for the task.
 """)
+st.image("/mnt/data/uber eats business problem.jpeg", width=450)
 
 # Purpose of the Website Section
 st.markdown("""
@@ -110,6 +111,8 @@ This platform allows users to input specific delivery parameters and instantly r
 - **Real-Time Predictions**: Get instant predictions on delivery times based on distance, weather, and traffic conditions.
 - **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
 """)
+
+st.image("/mnt/data/uber eats company profile.jpeg", width=450)
 
 # Input Section
 st.header("Enter Delivery Details")
