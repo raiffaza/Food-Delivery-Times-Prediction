@@ -25,12 +25,15 @@ def load_file_from_github(url):
 def make_prediction(model, scaler, expected_columns, numeric_features, input_data):
     """Make a prediction using the model and scaler."""
     data = {col: 0 for col in expected_columns}
+    # Fill numeric features
     for key, value in input_data.items():
-        if key in expected_columns:
+        if key in numeric_features:
             data[key] = value
-        elif key.startswith(('Weather_', 'Traffic_Level_', 'Time_of_Day_', 'Vehicle_Type_')):
-            data[key] = 1 if key in expected_columns else 0
-
+    # Fill categorical features (one-hot)
+    for cat in ['Weather', 'Traffic_Level', 'Time_of_Day', 'Vehicle_Type']:
+        col = f"{cat}_{input_data[cat]}"
+        if col in data:
+            data[col] = 1
     input_df = pd.DataFrame([data], columns=expected_columns)
     input_df[numeric_features] = scaler.transform(input_df[numeric_features])
     prediction = model.predict(input_df)[0]
@@ -52,14 +55,18 @@ def main():
         st.error("Failed to load model or scaler. Please check the URLs or try again later.")
         return
 
-    # Get expected feature names and order
     expected_columns = model.feature_names_in_.tolist()
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
-    # --- UI: Logo and Title ---
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image("uber eats.png", width=250)  # Ensure this image is in the same directory
+    # --- UI: Centered Logo ---
+    st.markdown(
+        """
+        <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+            <img src="uber eats.png" width="250">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.markdown("<h1 style='color: white; text-align: center;'>Uber Eats Delivery Time Prediction</h1>", unsafe_allow_html=True)
     st.markdown("""
@@ -76,7 +83,7 @@ def main():
     - Optimize resource allocation for couriers and delivery routes.
     - Help manage customer expectations and improve the overall delivery process.
     """, unsafe_allow_html=True)
-    st.image("uber eats business problem.jpeg", use_column_width=True)
+    st.image("uber eats business problem.jpeg", use_container_width=True)
 
     # --- Purpose of the Website ---
     st.markdown("""
@@ -85,7 +92,7 @@ def main():
     - **Real-Time Predictions**: Get instant predictions on delivery times based on distance, weather, and traffic conditions.
     - **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
     """, unsafe_allow_html=True)
-    st.image("uber eats company profile.jpeg", use_column_width=True)
+    st.image("uber eats company profile.jpeg", use_container_width=True)
 
     # --- Input Section ---
     st.header("Enter Delivery Details", help="Please fill in the following details to estimate delivery time.")
@@ -103,25 +110,19 @@ def main():
 
     # --- Prediction and Explanation ---
     if submitted:
-        # Prepare input data
         input_data = {
             'Distance_km': distance_km,
             'Preparation_Time_min': prep_time,
             'Courier_Experience_yrs': courier_exp,
-            f'Weather_{weather}': 1,
-            f'Traffic_Level_{traffic}': 1,
-            f'Time_of_Day_{time_of_day}': 1,
-            f'Vehicle_Type_{vehicle}': 1
+            'Weather': weather,
+            'Traffic_Level': traffic,
+            'Time_of_Day': time_of_day,
+            'Vehicle_Type': vehicle
         }
-
-        # Make prediction
         predicted_time = make_prediction(model, scaler, expected_columns, numeric_features, input_data)
-        
-        # Display result
         st.markdown("<h2 style='color: white; text-align: center;'>📊 Prediction Result</h2>", unsafe_allow_html=True)
         st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
 
-        # Explanation
         st.markdown("""
         ---
         ### 🔍 Explanation of Features
