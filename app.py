@@ -86,7 +86,7 @@ st.set_page_config(
 # Centered Logo (using local image)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("uber eats.png", width=250)  # The logo image name should be the same as the uploaded one
+    st.image("uber eats.png", width=250)  # Make sure this image is in the same directory as app.py
 
 # Title and Description with white text
 st.markdown("<h1 style='color: white; text-align: center;'>Uber Eats Delivery Time Prediction</h1>", unsafe_allow_html=True)
@@ -129,16 +129,16 @@ with st.form("delivery_form"):
     prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
     courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
 
-    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+    st.markdown("<span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
     weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
-    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+    st.markdown("<span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
     traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
-    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+    st.markdown("<span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
     time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
-    st.markdown("<span style='color:#00B14F; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+    st.markdown("<span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
     vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
     submit = st.form_submit_button("Predict Delivery Time")
