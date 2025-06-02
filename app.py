@@ -8,7 +8,7 @@ def local_css():
     st.markdown(
         """
         <style>
-        /* General page styling */
+        /* General styles */
         body {
             background-color: #121212;
             color: #f0f0f0;
@@ -50,12 +50,12 @@ def local_css():
             color: #000000 !important;
             font-weight: 600 !important;
         }
-        /* Center text and image container */
+        /* Centered content container */
         .centered-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 50px;
+            gap: 40px;
             flex-wrap: wrap;
             margin-top: 50px;
             margin-bottom: 50px;
@@ -91,27 +91,25 @@ local_css()
 model = joblib.load('xgb_tuned_model.pkl')
 scaler = joblib.load('scaler.pkl')
 
-# Load images for sidebar sections
+# Load images (make sure these image files are in your project folder)
+logo_img = Image.open("uber eats.png")
 company_profile_img = Image.open("uber eats company profile.jpeg")
 business_problem_img = Image.open("uber eats business problem.jpeg")
-purpose_website_img = Image.open("uber eats company profile.jpeg")  # as requested, same image as company profile
-
-# Load Uber Eats logo (no text below)
-logo_img = Image.open("uber eats.png")
+purpose_website_img = Image.open("uber eats company profile.jpeg")  # same image as company profile per your request
 
 # Sidebar navigation
 st.sidebar.title("Uber Eats Delivery Insights")
 menu = st.sidebar.radio("Navigate", ["Company Profile", "Business Problem", "Purpose of this Website", "Predict Delivery Time"])
 
-# Sidebar content
+# Sidebar content with centered image and text side by side
 if menu == "Company Profile":
     st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
     st.image(logo_img, width=180)
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown(
-        """
+        f"""
         <div class='centered-content'>
-            <img src="data:image/jpeg;base64,""" + company_profile_img._repr_png_().decode('utf-8') + """ alt="Company Profile" class="blunt-image"/>
+            <img src="data:image/jpeg;base64,{company_profile_img._repr_png_().decode('utf-8')}" alt="Company Profile" class="blunt-image"/>
             <p class='centered-text'>
                 Uber Eats is a global leader in food delivery, connecting customers with their favorite restaurants through innovative technology.
                 Our mission is to make eating effortless and enjoyable by delivering food quickly and reliably across cities worldwide.
@@ -126,9 +124,9 @@ elif menu == "Business Problem":
     st.image(logo_img, width=180)
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown(
-        """
+        f"""
         <div class='centered-content'>
-            <img src="data:image/jpeg;base64,""" + business_problem_img._repr_png_().decode('utf-8') + """ alt="Business Problem" class="blunt-image"/>
+            <img src="data:image/jpeg;base64,{business_problem_img._repr_png_().decode('utf-8')}" alt="Business Problem" class="blunt-image"/>
             <p class='centered-text'>
                 Accurately predicting delivery times remains a key challenge in food delivery logistics.
                 Late or inaccurate estimates reduce customer satisfaction, increase operational costs, and impact brand reputation.
@@ -144,9 +142,9 @@ elif menu == "Purpose of this Website":
     st.image(logo_img, width=180)
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown(
-        """
+        f"""
         <div class='centered-content'>
-            <img src="data:image/jpeg;base64,""" + purpose_website_img._repr_png_().decode('utf-8') + """ alt="Purpose of Website" class="blunt-image"/>
+            <img src="data:image/jpeg;base64,{purpose_website_img._repr_png_().decode('utf-8')}" alt="Purpose of Website" class="blunt-image"/>
             <p class='centered-text'>
                 This platform allows Uber Eats operations teams to input delivery parameters and instantly get a data-driven delivery time estimate.
                 Powered by a machine learning model, it supports smarter decision-making, better resource allocation, and improved customer experience.
@@ -156,6 +154,7 @@ elif menu == "Purpose of this Website":
         unsafe_allow_html=True
     )
 
+# Predict Delivery Time Page
 if menu == "Predict Delivery Time":
     st.markdown("<div class='logo-center'>", unsafe_allow_html=True)
     st.image(logo_img, width=180)
