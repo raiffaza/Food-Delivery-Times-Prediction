@@ -62,19 +62,18 @@ def main():
     This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
     """)
 
-    # --- Business Problem Section ---
+    # --- ABOUT SECTION ---
     st.markdown("""
-    ## Business Problem
-    Predicting delivery times is a crucial component of efficient operations at Uber Eats. Accurate delivery time predictions:
-    - Improve customer satisfaction by reducing delays.
-    - Optimize resource allocation for couriers and delivery routes.
-    - Help manage customer expectations and improve the overall delivery process.
-    """)
+    ## About Uber Eats
+    Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques to improve customer satisfaction and operational efficiency.
 
-    # Display the Business Problem Image (centered and full-width)
+    This app uses a trained machine learning model to predict the delivery time based on parameters like distance, weather, traffic, and more.
+    """, unsafe_allow_html=True)
+
+    # Display the Business Problem Image (wide and centered)
     st.image("uber eats business problem.jpeg", use_container_width=True)
 
-    # --- Purpose of the Website Section ---
+    # --- PURPOSE OF THE APP SECTION ---
     st.markdown("""
     ## Purpose of this Website
     This platform allows users to input specific delivery parameters and instantly receive a **data-driven estimate** of the delivery time, powered by an advanced **XGBoost machine learning model**.
@@ -85,8 +84,19 @@ def main():
     - More accurate delivery time predictions to optimize customer experience
     """)
 
-    # Display the Company Profile Image (centered and full-width)
+    # Display the Company Profile Image (wide and centered)
     st.image("uber eats company profile.jpeg", use_container_width=True)
+
+    # --- Load Model and Scaler ---
+    model = load_file_from_github(MODEL_URL)
+    scaler = load_file_from_github(SCALER_URL)
+    if model is None or scaler is None:
+        st.error("Failed to load model or scaler. Please check the URLs or try again later.")
+        return
+
+    # Ensure expected_columns is loaded from the model
+    expected_columns = model.feature_names_in_.tolist()  # Ensure this comes from the model
+    numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
     # --- Input Form Section ---
     st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
@@ -110,7 +120,7 @@ def main():
 
         submit = st.form_submit_button("Predict Delivery Time")
 
-    # --- Prediction and Explanation ---
+    # --- PREDICTION RESULT SECTION ---
     if submit:
         input_data = {
             'Distance_km': distance_km,
