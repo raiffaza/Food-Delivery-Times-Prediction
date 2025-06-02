@@ -6,16 +6,33 @@ from io import BytesIO
 
 # Function to load files directly from GitHub
 def load_file_from_github(url):
+    # Send GET request to fetch the file
     response = requests.get(url)
+    
+    # Check if request was successful (status code 200)
+    if response.status_code == 200:
+        print("File downloaded successfully")
+    else:
+        print("Error downloading the file")
+        return None
+
+    # Load the content of the file into joblib
     return joblib.load(BytesIO(response.content))
 
 # URLs for model and scaler files hosted on GitHub
-model_url = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/blob/main/xgb_tuned_model.pkl"
-scaler_url = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/blob/main/scaler.pkl"
+model_url = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl"
+scaler_url = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/scaler.pkl"
 
 # Load model and scaler from GitHub
 model = load_file_from_github(model_url)
 scaler = load_file_from_github(scaler_url)
+
+if model and scaler:
+    # Model and scaler loaded successfully
+    print("Model and scaler loaded successfully")
+else:
+    # Failed to load model and scaler
+    print("Error loading model and scaler")
 
 # Get the exact feature names and order expected by the model
 expected_columns = model.feature_names_in_.tolist()
