@@ -69,7 +69,9 @@ def main():
     - Optimize resource allocation for couriers and delivery routes.
     - Help manage customer expectations and improve the overall delivery process.
     """, unsafe_allow_html=True)
-    st.image("uber eats business problem.jpeg", use_container_width=True)
+    col1, col2, col3 = st.columns([1, 2, 1])  # Adjust proportions as needed
+    with col2:
+    st.image("uber eats business problem.jpeg", width=400)  # Set fixed width instead of full container width
 
     # --- Purpose of the Website ---
     st.markdown("""
