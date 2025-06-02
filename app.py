@@ -5,8 +5,8 @@ import requests
 from io import BytesIO
 
 # --- Constants ---
-MODEL_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl" 
-SCALER_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/scaler.pkl" 
+MODEL_URL = "xgb_tuned_model.pkl" 
+SCALER_URL = "scaler.pkl" 
 
 # --- Helper Functions ---
 @st.cache_resource
