@@ -50,13 +50,10 @@ def main():
     )
 
     # --- Title and Logo (Centered) ---
-    st.markdown(
-        """
-        <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
-            <img src="uber eats.png" width="250">
-        </div>
-        """,
-        unsafe_allow_html=True
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("uber eats.png", width=250)
+    
     )
     st.markdown("<h1 style='color: white; text-align: center;'>Uber Eats Delivery Time Prediction</h1>", unsafe_allow_html=True)
     st.markdown("""
@@ -82,7 +79,7 @@ def main():
     - **Real-Time Predictions**: Get instant predictions on delivery times based on distance, weather, and traffic conditions.
     - **Improved Operations**: This model helps Uber Eats enhance its operations by providing more accurate predictions for better resource allocation.
     """, unsafe_allow_html=True)
-    st.image("uber eats company profile.jpeg", use_container_width=True)
+
 
     # --- Load Model and Scaler ---
     model = load_file_from_github(MODEL_URL)
