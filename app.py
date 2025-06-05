@@ -6,7 +6,6 @@ from io import BytesIO
 
 # --- Constants ---
 MODEL_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl" 
-SCALER_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/scaler.pkl"
 
 # --- Helper Functions ---
 @st.cache_resource
@@ -22,8 +21,8 @@ def load_file_from_github(url):
         st.error(f"Error loading file: {str(e)}")
         return None
 
-def make_prediction(model, scaler, expected_columns, numeric_features, input_data):
-    """Make a prediction using the model and scaler."""
+def make_prediction(model, expected_columns, numeric_features, input_data):
+    """Make a prediction using the model without scaling."""
     # Initialize all features to 0
     data = {col: 0 for col in expected_columns}
     # Fill numeric features
@@ -35,9 +34,8 @@ def make_prediction(model, scaler, expected_columns, numeric_features, input_dat
         col = f"{cat}_{input_data[cat]}"
         if col in data:
             data[col] = 1
-    # Convert to DataFrame and scale
+    # Convert to DataFrame
     input_df = pd.DataFrame([data], columns=expected_columns)
-    input_df[numeric_features] = scaler.transform(input_df[numeric_features])
     prediction = model.predict(input_df)[0]
     return prediction
 
@@ -87,11 +85,10 @@ def main():
     # Display the Company Profile Image (wide and centered)
     st.image("uber eats company profile.jpeg", use_container_width=True)
 
-    # --- Load Model and Scaler ---
+    # --- Load Model ---
     model = load_file_from_github(MODEL_URL)
-    scaler = load_file_from_github(SCALER_URL)
-    if model is None or scaler is None:
-        st.error("Failed to load model or scaler. Please check the URLs or try again later.")
+    if model is None:
+        st.error("Failed to load model. Please check the URL or try again later.")
         return
 
     # Ensure expected_columns is loaded from the model
@@ -131,7 +128,7 @@ def main():
             'Time_of_Day': time_of_day,
             'Vehicle_Type': vehicle
         }
-        predicted_time = make_prediction(model, scaler, expected_columns, numeric_features, input_data)
+        predicted_time = make_prediction(model, expected_columns, numeric_features, input_data)
         st.markdown("<h2 style='color: white; text-align: center;'>📊 Prediction Result</h2>", unsafe_allow_html=True)
         st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
 
