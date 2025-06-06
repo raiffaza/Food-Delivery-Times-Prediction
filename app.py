@@ -136,13 +136,13 @@ def main():
         ---
         ### 🔍 Explanation of Features
 
-        - `Distance (km)` (numeric): Distance between the restaurant and the delivery address.
-        - `Preparation Time (minutes)` (numeric): Time taken to prepare the order.
-        - `Courier Experience (years)` (numeric): Years of experience of the courier.
-        - `Weather Condition` (categorical): Weather during the delivery (Windy, Clear, etc.).
-        - `Traffic Level` (categorical): Traffic conditions during the delivery (Low, Medium, High).
-        - `Time of Day` (categorical): Time of day during the delivery (Morning, Afternoon, Evening, Night).
-        - `Vehicle Type` (categorical): Type of vehicle used by the courier (Scooter, Bike, Car).
+        - `Distance (km)`: Distance between the restaurant and the delivery address.
+        - `Preparation Time (minutes)`: Time taken to prepare the order.
+        - `Courier Experience (years)`: Years of experience of the courier.
+        - `Weather Condition`: Weather during the delivery (Windy, Clear, etc.).
+        - `Traffic Level`: Traffic conditions during the delivery (Low, Medium, High).
+        - `Time of Day`: Time of day during the delivery (Morning, Afternoon, Evening, Night).
+        - `Vehicle Type`: Type of vehicle used by the courier (Scooter, Bike, Car).
         """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
