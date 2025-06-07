@@ -63,6 +63,7 @@ def main():
     st.markdown("""
     ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
     Our goal is to provide the most accurate delivery time estimates to ensure a seamless customer experience.
+    This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
     """)
 
     model = load_file_from_github(MODEL_URL)
