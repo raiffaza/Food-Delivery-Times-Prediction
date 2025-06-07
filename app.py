@@ -90,19 +90,19 @@ def main():
         courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
         
         # Weather Condition dropdown
-        st.markdown("<br><span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+        st.write("Weather Condition")
         weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
         # Traffic Level dropdown
-        st.markdown("<br><span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+        st.write("Traffic Level")
         traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
         # Time of Day dropdown
-        st.markdown("<br><span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+        st.write("Time of Day")
         time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
         # Vehicle Type dropdown
-        st.markdown("<br><span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+        st.write("Vehicle Type")
         vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
         submit = st.form_submit_button("Predict Delivery Time")
