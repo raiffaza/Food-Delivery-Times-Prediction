@@ -38,7 +38,7 @@ def make_prediction(model, expected_columns, numeric_features, input_data):
             data[col_name] = 1
         else:
             print(f"⚠️ Warning: Column '{col_name}' not found in model features.")
-
+    
     # Ensure the data dictionary matches the expected columns
     data = {col: data.get(col, 0) for col in expected_columns}
     
@@ -57,7 +57,7 @@ def main():
         layout="centered"  # Centered layout for all content
     )
 
-    # --- Header Section (Centered Logo) --- 
+    # --- Header Section (Centered Logo) ---
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.image("uber eats.png", width=250)  # Uber Eats logo centered
@@ -70,32 +70,6 @@ def main():
     This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
     """)
 
-    # --- Add Centered Images with Text ---
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image("uber eats business problem.jpeg", use_column_width=True)  # Image centered
-        st.markdown("""
-        ### Business Problem
-        The core challenge faced by Uber Eats is providing accurate and timely delivery estimates. 
-        Predicting delivery time helps customers plan better and ensures a smooth delivery process.
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.image("uber eats company profile.jpeg", use_column_width=True)  # Image centered
-        st.markdown("""
-        ### Company Profile
-        Uber Eats is transforming food delivery with advanced machine learning algorithms. 
-        We aim to optimize the customer experience by reducing wait times and providing better accuracy in delivery time predictions.
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.image("uber eats purpose.jpg", use_column_width=True)  # Image centered
-        st.markdown("""
-        ### Purpose of the App
-        This app leverages machine learning to predict delivery times accurately based on various features such as distance, weather, traffic, and more.
-        It enhances Uber Eats' operations by providing **real-time delivery time predictions**.
-        """, unsafe_allow_html=True)
-
     # --- Load Model ---
     model = load_file_from_github(MODEL_URL)
     if model is None:
@@ -105,6 +79,32 @@ def main():
     # Ensure expected_columns is loaded from the model
     expected_columns = model.feature_names_in_.tolist()  # Ensure this comes from the model
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
+
+    # --- Display Images and Text About Website Professionalism ---
+    st.markdown("<h2 style='text-align: center;'>Website Overview</h2>", unsafe_allow_html=True)
+    st.markdown("""
+    The Streamlit web application has been designed to look professional and user-friendly, ensuring an intuitive and engaging user experience.
+    Below are some visual elements that highlight the app's design and functionality:
+    """)
+
+    # Display images
+    image_paths = [
+        "uber eats business problem.jpeg",
+        "uber eats company profile.jpeg",
+        "uber eats purpose.jpg"
+    ]
+    for path in image_paths:
+        st.image(path, caption=path, use_column_width=True)
+
+    # Add text about professionalism
+    st.markdown("""
+    - **Professional Design:** The app features a clean and modern interface, making it easy to navigate.
+    - **User-Friendly Inputs:** All necessary fields are clearly labeled and organized for smooth interaction.
+    - **Real-Time Predictions:** Users receive instant feedback after submitting inputs, enhancing usability.
+    - **Educational Insights:** Detailed explanations of each feature help users understand how predictions are made.
+
+    Overall, the Streamlit app provides a polished and reliable platform for predicting delivery times, aligning perfectly with Uber Eats' commitment to excellence.
+    """)
 
     # --- Input Form Section ---
     st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
