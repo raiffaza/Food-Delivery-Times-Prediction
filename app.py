@@ -84,6 +84,24 @@ def main():
     st.markdown("### 🛵 Enter Delivery Details", unsafe_allow_html=True)
 
     with st.form("delivery_form"):
+        # Adding custom CSS to remove space between inputs and button
+        st.markdown(
+            """
+            <style>
+            .css-1n76v6h {
+                margin-bottom: 0px;
+            }
+            .css-1niwtxl {
+                margin-top: 0px;
+            }
+            .css-1lcbfyy {
+                margin-top: 0px;
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
+
+        # Input fields
         distance_km = st.number_input("📏 Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
         prep_time = st.number_input("⏱️ Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
         courier_exp = st.number_input("📅 Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
@@ -95,6 +113,8 @@ def main():
         time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'], key="time")
         st.markdown("<span style='color:white; font-weight:bold;'>🛺 Vehicle Type</span>", unsafe_allow_html=True)
         vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'], key="vehicle")
+        
+        # Submit button
         submit = st.form_submit_button("🚀 Predict Delivery Time")
 
     # --- PREDICTION RESULT SECTION ---
