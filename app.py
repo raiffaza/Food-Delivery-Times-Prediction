@@ -62,7 +62,7 @@ def main():
     with col2:
         st.image("uber eats.png", width=250)  # Uber Eats logo centered
 
-    # --- Title and Description Section --- 
+    # --- Title and Description Section ---
     st.title("Uber Eats Delivery Time Prediction")
     st.markdown("""
     ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
@@ -80,31 +80,33 @@ def main():
     expected_columns = model.feature_names_in_.tolist()  # Ensure this comes from the model
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
+    # --- Input Form Section ---
     st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
 
-with st.form("delivery_form"):
-    # Distance, Preparation Time, and Courier Experience
-    distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
-    prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
-    courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
-    
-    # Weather Condition dropdown
-    st.markdown("<br><span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
-    weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
+    with st.form("delivery_form"):
+        # Distance, Preparation Time, and Courier Experience
+        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
+        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
+        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+        
+        # Weather Condition dropdown
+        st.markdown("<br><span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+        weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
-    # Traffic Level dropdown
-    st.markdown("<br><span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
-    traffic = st.selectbox("", ['Low', 'Medium', 'High'])
+        # Traffic Level dropdown
+        st.markdown("<br><span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+        traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
-    # Time of Day dropdown
-    st.markdown("<br><span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
-    time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
+        # Time of Day dropdown
+        st.markdown("<br><span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+        time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
-    # Vehicle Type dropdown
-    st.markdown("<br><span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
-    vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
+        # Vehicle Type dropdown
+        st.markdown("<br><span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+        vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
-    submit = st.form_submit_button("Predict Delivery Time")
+        submit = st.form_submit_button("Predict Delivery Time")
+
     # --- PREDICTION RESULT SECTION ---
     if submit:
         input_data = {
@@ -120,8 +122,8 @@ with st.form("delivery_form"):
         st.markdown("<h2 style='color: white; text-align: center;'>📊 Prediction Result</h2>", unsafe_allow_html=True)
         st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
 
-        st.markdown(""" 
-        --- 
+        st.markdown("""
+        ---
         ### 🔍 Explanation of Features
 
         - `Distance (km)`: Distance between the restaurant and the delivery address.
