@@ -57,6 +57,26 @@ def main():
         layout="centered"
     )
 
+    # --- Inject Custom CSS to Reduce Spacing ---
+    st.markdown("""
+    <style>
+    .stSelectbox label {
+        margin-bottom: 0px !important;
+    }
+    .stNumberInput label {
+        margin-bottom: 0px !important;
+    }
+    .stForm {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+    body {
+        background-color: #1e1e1e;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     # --- Header Section (Centered Logo) ---
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -77,44 +97,34 @@ def main():
         return
 
     # Get expected feature names from the model
-    expected_columns = model.feature_names_in_.tolist()
+    try:
+        expected_columns = model.feature_names_in_.tolist()
+    except AttributeError:
+        st.error("Model does not contain feature names. Please re-save the model with `feature_names_in_` included.")
+        return
+
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
     # --- Input Form Section ---
     st.markdown("### 🛵 Enter Delivery Details", unsafe_allow_html=True)
 
     with st.form("delivery_form"):
-        # Adding custom CSS to remove space between inputs and button
-        st.markdown(
-            """
-            <style>
-            .css-1n76v6h {
-                margin-bottom: 0px;
-            }
-            .css-1niwtxl {
-                margin-top: 0px;
-            }
-            .css-1lcbfyy {
-                margin-top: 0px;
-            }
-            </style>
-            """, unsafe_allow_html=True
-        )
-
-        # Input fields
         distance_km = st.number_input("📏 Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
         prep_time = st.number_input("⏱️ Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
         courier_exp = st.number_input("📅 Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+
         st.markdown("<span style='color:white; font-weight:bold;'>🌦️ Weather Condition</span>", unsafe_allow_html=True)
         weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'], key="weather")
+
         st.markdown("<span style='color:white; font-weight:bold;'>🚦 Traffic Level</span>", unsafe_allow_html=True)
         traffic = st.selectbox("", ['Low', 'Medium', 'High'], key="traffic")
+
         st.markdown("<span style='color:white; font-weight:bold;'>⏰ Time of Day</span>", unsafe_allow_html=True)
         time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'], key="time")
+
         st.markdown("<span style='color:white; font-weight:bold;'>🛺 Vehicle Type</span>", unsafe_allow_html=True)
         vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'], key="vehicle")
-        
-        # Submit button
+
         submit = st.form_submit_button("🚀 Predict Delivery Time")
 
     # --- PREDICTION RESULT SECTION ---
