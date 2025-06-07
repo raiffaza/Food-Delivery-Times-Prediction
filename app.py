@@ -70,31 +70,6 @@ def main():
     This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
     """)
 
-    # --- ABOUT SECTION ---
-    st.markdown("""
-    ## About Uber Eats
-    Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques to improve customer satisfaction and operational efficiency.
-
-    This app uses a trained machine learning model to predict the delivery time based on parameters like distance, weather, traffic, and more.
-    """, unsafe_allow_html=True)
-
-    # Display the Business Problem Image (wide and centered)
-    st.image("uber eats business problem.jpeg", use_container_width=True)
-
-    # --- PURPOSE OF THE APP SECTION ---
-    st.markdown("""
-    ## Purpose of this Website
-    This platform allows users to input specific delivery parameters and instantly receive a **data-driven estimate** of the delivery time, powered by an advanced **XGBoost machine learning model**.
-    
-    ### 🎯 Objectives:
-    - Real-time predictions based on input data
-    - Improved resource allocation for Uber Eats operations
-    - More accurate delivery time predictions to optimize customer experience
-    """)
-
-    # Display the Company Profile Image (wide and centered)
-    st.image("uber eats company profile.jpeg", use_container_width=True)
-
     # --- Load Model ---
     model = load_file_from_github(MODEL_URL)
     if model is None:
