@@ -25,12 +25,12 @@ def make_prediction(model, expected_columns, numeric_features, input_data):
     """Make a prediction using the model without scaling."""
     # Initialize all features to 0
     data = {col: 0 for col in expected_columns}
-
+    
     # Fill numeric features
     for key in numeric_features:
         if key in input_data:
             data[key] = input_data[key]
-
+    
     # Fill categorical features (one-hot encoding)
     for cat in ['Weather', 'Traffic_Level', 'Time_of_Day', 'Vehicle_Type']:
         col_name = f"{cat}_{input_data[cat]}"
@@ -41,48 +41,26 @@ def make_prediction(model, expected_columns, numeric_features, input_data):
 
     # Ensure the data dictionary matches the expected columns
     data = {col: data.get(col, 0) for col in expected_columns}
-
-    # Convert to DataFrame with correct column order
+    
+    # Convert to DataFrame with the correct columns
     input_df = pd.DataFrame([data], columns=expected_columns)
 
-    # Make prediction
+    # Make the prediction
     prediction = model.predict(input_df)[0]
     return prediction
-
-# --- Inject Custom CSS to Reduce Spacing ---
-st.markdown("""
-<style>
-body {
-    background-color: #1e1e1e;
-    color: white;
-}
-label {
-    margin-bottom: 0px !important;
-    font-size: 14px !important;
-}
-.stSelectbox > div > label,
-.stNumberInput > div > label {
-    margin-bottom: 0px !important;
-}
-.form-row {
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-}
-</style>
-""", unsafe_allow_html=True)
 
 # --- Main App ---
 def main():
     st.set_page_config(
         page_title="Uber Eats Delivery Time Prediction",
         page_icon="🍔",
-        layout="centered"
+        layout="centered"  # Centered layout for all content
     )
 
-    # --- Header Section (Centered Logo) ---
+    # --- Header Section (Centered Logo) --- 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image("uber eats.png", width=250)
+        st.image("uber eats.png", width=250)  # Uber Eats logo centered
 
     # --- Title and Description Section ---
     st.title("Uber Eats Delivery Time Prediction")
@@ -98,36 +76,31 @@ def main():
         st.error("Failed to load model. Please check the URL or try again later.")
         return
 
-    # Get expected feature names from the model
-    try:
-        expected_columns = model.feature_names_in_.tolist()
-    except AttributeError:
-        st.error("Model does not contain feature names. Please re-save the model with `feature_names_in_` included.")
-        return
-
+    # Ensure expected_columns is loaded from the model
+    expected_columns = model.feature_names_in_.tolist()  # Ensure this comes from the model
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
     # --- Input Form Section ---
-    st.markdown("### 🛵 Enter Delivery Details", unsafe_allow_html=True)
+    st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
 
     with st.form("delivery_form"):
-        distance_km = st.number_input("📏 Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
-        prep_time = st.number_input("⏱️ Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
-        courier_exp = st.number_input("📅 Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
+        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
+        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
 
-        st.markdown("<span style='color:white; font-weight:bold;'>🌦️ Weather Condition</span>", unsafe_allow_html=True)
-        weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'], key="weather")
+        st.markdown("<span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+        weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
-        st.markdown("<span style='color:white; font-weight:bold;'>🚦 Traffic Level</span>", unsafe_allow_html=True)
-        traffic = st.selectbox("", ['Low', 'Medium', 'High'], key="traffic")
+        st.markdown("<span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+        traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
-        st.markdown("<span style='color:white; font-weight:bold;'>⏰ Time of Day</span>", unsafe_allow_html=True)
-        time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'], key="time")
+        st.markdown("<span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+        time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
-        st.markdown("<span style='color:white; font-weight:bold;'>🛺 Vehicle Type</span>", unsafe_allow_html=True)
-        vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'], key="vehicle")
+        st.markdown("<span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+        vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
-        submit = st.form_submit_button("🚀 Predict Delivery Time")
+        submit = st.form_submit_button("Predict Delivery Time")
 
     # --- PREDICTION RESULT SECTION ---
     if submit:
@@ -140,7 +113,6 @@ def main():
             'Time_of_Day': time_of_day,
             'Vehicle_Type': vehicle
         }
-
         predicted_time = make_prediction(model, expected_columns, numeric_features, input_data)
         st.markdown("<h2 style='color: white; text-align: center;'>📊 Prediction Result</h2>", unsafe_allow_html=True)
         st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
@@ -158,6 +130,5 @@ def main():
         - `Vehicle Type`: Type of vehicle used by the courier (Scooter, Bike, Car).
         """, unsafe_allow_html=True)
 
-# Run the app
 if __name__ == "__main__":
     main()
