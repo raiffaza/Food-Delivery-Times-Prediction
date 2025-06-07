@@ -25,17 +25,27 @@ def make_prediction(model, expected_columns, numeric_features, input_data):
     """Make a prediction using the model without scaling."""
     # Initialize all features to 0
     data = {col: 0 for col in expected_columns}
+    
     # Fill numeric features
     for key in numeric_features:
         if key in input_data:
             data[key] = input_data[key]
-    # Fill categorical features (one-hot)
+    
+    # Fill categorical features (one-hot encoding)
     for cat in ['Weather', 'Traffic_Level', 'Time_of_Day', 'Vehicle_Type']:
-        col = f"{cat}_{input_data[cat]}"
-        if col in data:
-            data[col] = 1
-    # Convert to DataFrame
+        col_name = f"{cat}_{input_data[cat]}"
+        if col_name in data:
+            data[col_name] = 1
+        else:
+            print(f"⚠️ Warning: Column '{col_name}' not found in model features.")
+
+    # Ensure the data dictionary matches the expected columns
+    data = {col: data.get(col, 0) for col in expected_columns}
+    
+    # Convert to DataFrame with the correct columns
     input_df = pd.DataFrame([data], columns=expected_columns)
+
+    # Make the prediction
     prediction = model.predict(input_df)[0]
     return prediction
 
