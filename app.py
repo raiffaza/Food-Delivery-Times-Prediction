@@ -70,6 +70,32 @@ def main():
     This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
     """)
 
+    # --- Add Centered Images with Text ---
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image("uber eats business problem.jpeg", use_column_width=True)  # Image centered
+        st.markdown("""
+        ### Business Problem
+        The core challenge faced by Uber Eats is providing accurate and timely delivery estimates. 
+        Predicting delivery time helps customers plan better and ensures a smooth delivery process.
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.image("uber eats company profile.jpeg", use_column_width=True)  # Image centered
+        st.markdown("""
+        ### Company Profile
+        Uber Eats is transforming food delivery with advanced machine learning algorithms. 
+        We aim to optimize the customer experience by reducing wait times and providing better accuracy in delivery time predictions.
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.image("uber eats purpose.jpg", use_column_width=True)  # Image centered
+        st.markdown("""
+        ### Purpose of the App
+        This app leverages machine learning to predict delivery times accurately based on various features such as distance, weather, traffic, and more.
+        It enhances Uber Eats' operations by providing **real-time delivery time predictions**.
+        """, unsafe_allow_html=True)
+
     # --- Load Model ---
     model = load_file_from_github(MODEL_URL)
     if model is None:
