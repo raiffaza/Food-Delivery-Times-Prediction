@@ -62,7 +62,7 @@ def main():
     with col2:
         st.image("uber eats.png", width=250)  # Uber Eats logo centered
 
-    # --- Title and Description Section ---
+    # --- Title and Description Section --- 
     st.title("Uber Eats Delivery Time Prediction")
     st.markdown("""
     ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
@@ -88,16 +88,17 @@ def main():
         prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
         courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
 
-        st.markdown("<span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+        # Adjust label and selectbox spacing using inline style
+        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Weather Condition</span>", unsafe_allow_html=True)
         weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
-        st.markdown("<span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Traffic Level</span>", unsafe_allow_html=True)
         traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
-        st.markdown("<span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Time of Day</span>", unsafe_allow_html=True)
         time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
-        st.markdown("<span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Vehicle Type</span>", unsafe_allow_html=True)
         vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
         submit = st.form_submit_button("Predict Delivery Time")
@@ -117,8 +118,8 @@ def main():
         st.markdown("<h2 style='color: white; text-align: center;'>📊 Prediction Result</h2>", unsafe_allow_html=True)
         st.success(f"✅ Estimated Delivery Time: {predicted_time:.2f} minutes", icon="💨")
 
-        st.markdown("""
-        ---
+        st.markdown(""" 
+        --- 
         ### 🔍 Explanation of Features
 
         - `Distance (km)`: Distance between the restaurant and the delivery address.
