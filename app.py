@@ -80,29 +80,31 @@ def main():
     expected_columns = model.feature_names_in_.tolist()  # Ensure this comes from the model
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
-    # --- Input Form Section ---
     st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
 
-    with st.form("delivery_form"):
-        distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
-        prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
-        courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+with st.form("delivery_form"):
+    # Distance, Preparation Time, and Courier Experience
+    distance_km = st.number_input("Distance (km)", min_value=0.0, format="%.2f", help="Distance between restaurant and delivery address.")
+    prep_time = st.number_input("Preparation Time (minutes)", min_value=0, help="Time taken to prepare the order.")
+    courier_exp = st.number_input("Courier Experience (years)", min_value=0.0, format="%.1f", help="Years of delivery courier experience.")
+    
+    # Weather Condition dropdown
+    st.markdown("<br><span style='color:white; font-weight:bold;'>Weather Condition</span>", unsafe_allow_html=True)
+    weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
 
-        # Adjust label and selectbox spacing using inline style
-        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Weather Condition</span>", unsafe_allow_html=True)
-        weather = st.selectbox("", ['Windy', 'Clear', 'Foggy', 'Rainy', 'Snowy'])
+    # Traffic Level dropdown
+    st.markdown("<br><span style='color:white; font-weight:bold;'>Traffic Level</span>", unsafe_allow_html=True)
+    traffic = st.selectbox("", ['Low', 'Medium', 'High'])
 
-        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Traffic Level</span>", unsafe_allow_html=True)
-        traffic = st.selectbox("", ['Low', 'Medium', 'High'])
+    # Time of Day dropdown
+    st.markdown("<br><span style='color:white; font-weight:bold;'>Time of Day</span>", unsafe_allow_html=True)
+    time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
 
-        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Time of Day</span>", unsafe_allow_html=True)
-        time_of_day = st.selectbox("", ['Afternoon', 'Evening', 'Night', 'Morning'])
+    # Vehicle Type dropdown
+    st.markdown("<br><span style='color:white; font-weight:bold;'>Vehicle Type</span>", unsafe_allow_html=True)
+    vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
 
-        st.markdown("<span style='color:white; font-weight:bold; display:block;'>Vehicle Type</span>", unsafe_allow_html=True)
-        vehicle = st.selectbox("", ['Scooter', 'Bike', 'Car'])
-
-        submit = st.form_submit_button("Predict Delivery Time")
-
+    submit = st.form_submit_button("Predict Delivery Time")
     # --- PREDICTION RESULT SECTION ---
     if submit:
         input_data = {
