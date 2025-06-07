@@ -5,7 +5,7 @@ import requests
 from io import BytesIO
 
 # --- Constants ---
-MODEL_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl" 
+MODEL_URL = "https://github.com/raiffaza/Food-Delivery-Times-Prediction/raw/main/xgb_tuned_model.pkl"   
 
 # --- Helper Functions ---
 @st.cache_resource
@@ -38,7 +38,7 @@ def make_prediction(model, expected_columns, numeric_features, input_data):
             data[col_name] = 1
         else:
             print(f"⚠️ Warning: Column '{col_name}' not found in model features.")
-    
+
     # Ensure the data dictionary matches the expected columns
     data = {col: data.get(col, 0) for col in expected_columns}
     
@@ -57,20 +57,44 @@ def main():
         layout="centered"  # Centered layout for all content
     )
 
-    # --- Header Section (Centered Logo) ---
+    # --- Image Section (Centered Image with Text) --- 
+    st.markdown("<h1 style='text-align: center; color: white;'>Website Looks Professional</h1>", unsafe_allow_html=True)
+    
+    # Adding images with descriptive text under each one
+    st.markdown(
+        """
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 20px;">
+            <div style="text-align: center;">
+                <img src="uber eats business problem.jpeg" width="400"/>
+                <p><strong>Business Problem:</strong> Understanding challenges in Uber Eats' business model to optimize delivery times and customer satisfaction.</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="uber eats company profile.jpeg" width="400"/>
+                <p><strong>Company Profile:</strong> A quick snapshot of Uber Eats and its business operations, growth, and market position in the global food delivery industry.</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="uber eats purpose.jpg" width="400"/>
+                <p><strong>Purpose:</strong> Exploring the core mission of Uber Eats, which is to provide seamless and efficient food delivery with cutting-edge technology and customer service.</p>
+            </div>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+
+    # --- Header Section (Centered Logo) --- 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.image("uber eats.png", width=250)  # Uber Eats logo centered
 
-    # --- Title and Description Section ---
+    # --- Title and Description Section --- 
     st.title("Uber Eats Delivery Time Prediction")
-    st.markdown("""
+    st.markdown(""" 
     ### Uber Eats is revolutionizing food delivery by leveraging cutting-edge machine learning techniques.
     Our goal is to provide the most accurate delivery time estimates to ensure a seamless customer experience.
     This app uses a trained machine learning model to predict the delivery time based on input parameters such as distance, weather, traffic, and more.
     """)
 
-    # --- Load Model ---
+    # --- Load Model --- 
     model = load_file_from_github(MODEL_URL)
     if model is None:
         st.error("Failed to load model. Please check the URL or try again later.")
@@ -80,33 +104,7 @@ def main():
     expected_columns = model.feature_names_in_.tolist()  # Ensure this comes from the model
     numeric_features = ['Distance_km', 'Preparation_Time_min', 'Courier_Experience_yrs']
 
-    # --- Display Images and Text About Website Professionalism ---
-    st.markdown("<h2 style='text-align: center;'>Website Overview</h2>", unsafe_allow_html=True)
-    st.markdown("""
-    The Streamlit web application has been designed to look professional and user-friendly, ensuring an intuitive and engaging user experience.
-    Below are some visual elements that highlight the app's design and functionality:
-    """)
-
-    # Display images
-    image_paths = [
-        "uber eats business problem.jpeg",
-        "uber eats company profile.jpeg",
-        "uber eats purpose.jpg"
-    ]
-    for path in image_paths:
-        st.image(path, caption=path, use_column_width=True)
-
-    # Add text about professionalism
-    st.markdown("""
-    - **Professional Design:** The app features a clean and modern interface, making it easy to navigate.
-    - **User-Friendly Inputs:** All necessary fields are clearly labeled and organized for smooth interaction.
-    - **Real-Time Predictions:** Users receive instant feedback after submitting inputs, enhancing usability.
-    - **Educational Insights:** Detailed explanations of each feature help users understand how predictions are made.
-
-    Overall, the Streamlit app provides a polished and reliable platform for predicting delivery times, aligning perfectly with Uber Eats' commitment to excellence.
-    """)
-
-    # --- Input Form Section ---
+    # --- Input Form Section --- 
     st.markdown("### Enter Delivery Details", unsafe_allow_html=True)
 
     with st.form("delivery_form"):
