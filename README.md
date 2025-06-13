@@ -86,18 +86,11 @@ This model is deployed using **Streamlit** on Streamlit Cloud. You can interact 
 
 ### How to Deploy the App on Streamlit Cloud
 
-If you want to deploy this app on Streamlit Cloud, follow these steps:
+If you want to deploy this project on Streamlit Cloud by yourself (Not using my streamlit link), follow these steps:
 
 1. **Push the Code to GitHub**:
 
-   * Ensure the project is uploaded to a **GitHub repository**. You can push your code using the following commands:
-
-     ```bash
-     git init
-     git remote add origin <your-repository-url>
-     git add .
-     git commit -m "Initial commit"
-     git push -u origin main
+   * Ensure the project is uploaded to a **GitHub repository**. such as **Requirements.txt, app.py, your-project.ipynb, your-model.pkl, etc.
      ```
 
 2. **Go to Streamlit Cloud**:
@@ -111,12 +104,9 @@ If you want to deploy this app on Streamlit Cloud, follow these steps:
 
 4. **Requirements**:
 
-   * Ensure your project has a **`requirements.txt`** file that lists the necessary dependencies. If not, create it using:
-
-     ```bash
-     pip freeze > requirements.txt
-     ```
-   * Common dependencies might include:
+   * Ensure your project has a **`requirements.txt`** file that lists the necessary dependencies.
+     
+   * Common dependencies on my case include:
 
      ```text
      pandas
